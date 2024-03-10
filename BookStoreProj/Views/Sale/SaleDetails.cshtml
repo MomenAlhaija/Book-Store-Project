@@ -1,0 +1,41 @@
+﻿@using BookStore.Models
+@{
+    ViewBag.Title = "Sale Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<SaleDetailesModel>
+<div style="width:100%;padding:3% 5%">
+    <div class="col">
+        <table class="table bg-white rounded shadow-sm  table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Sale Date </th>
+                    <th scope="col">Book Title</th>
+                    <th scope="col">Book Image</th>
+                    <th scope="col">Book Price</th>
+                    <th scope="col">Book Quantity</th>
+                    <th scope="col">Total Unit Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sale in Model)
+                {
+                    <tr>
+                        <td>@sale.SalesDate.ToShortDateString()</td>
+                        <td>@sale.BookTitle</td>
+                        <td>
+                            <img style="width:40px;height:40px;height:100%" src="~/Books/@sale.CoverImageUrl" />
+                        </td>
+                        <td>@sale.Price JD</td>
+                        <td>@sale.SaleQuantity</td>
+                        <td>@sale.TotalUnitPrice JD</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div>
+            <a class="btn btn-info" title="Back" href="@Url.Action("Index")">Back To List</a>
+        </div>
+    </div>
+</div>
+

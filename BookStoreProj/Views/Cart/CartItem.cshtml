@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "CartItem";
+}
+@using BookStore.Models
+<link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+@model IEnumerable<CartItemsModel>
+<section class="cart-item page">
+    <h2>Book Cart</h2>
+    <p>@ViewBag.ErrorMessage</p>
+    <div class="product-table">
+        @if (Model != null && Model.Count() > 0)
+        {
+            <table cellspacing=0>
+                <tr class="heading">
+                    <th>Book Img</th>
+                    <th>Book Title</th>
+                    <th>Book Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Delete</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr class="data">
+                        <td>
+                            <img src="~/Books/@item.CoverImageUrl" />
+                        </td>
+                        <td>@item.BookTitle</td>
+                        <td>@item.Price</td>
+                        <td>
+                            <div class="input-group">
+                                <div class="quantity">
+                                    <input type="button" value="-" class="button-minus" data-field="quantity" />
+                                    <input data-previous-value="initialValue" min="1" type="text" id="quantity" step="0" min="1" value="@item.Quantity" name="quantity" class="quantity-field" style="width: 4.5rem" />
+                                    <input type="button" value="+" class="button-plus" data-field="quantity" />
+                                </div>
+                            </div>
+                        </td>
+                        <td class="total-value">@(item.Price * item.Quantity)</td>
+                        <td><i class="fa-solid fa-trash remove-item" data-itemid="@item.DetaileId"></i></td>
+                    </tr>
+                }
+
+
+            </table>
+        }
+    </div>
+
+    <section class="discount-summary">
+        @*<div class="discount-section">
+            <h4>Discount Coupon</h4>
+            <div class="discount-form">
+                <input type="text" placeholder="Enter Coupon Code" style="text-transform: uppercase;">
+                <button>Apply Coupon</button>
+            </div>
+        </div>*@
+        <div class="summary-section">
+            <h4>Cart Subtotal</h4>
+            <div class="order-detail-table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Order Subtotal</td>
+                            <td class="totalPrice"></td>
+                        </tr>
+                        <tr>
+                            <td>Shipping</td>
+                            <td>Free Shipping</td>
+                        </tr>
+                        <tr>
+                            <td>Coupon</td>
+                            <td>$0</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td class="totalPrice"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                @if (Model!=null && Model.Count() > 0)
+                {
+                 <a class="btn btn-primary" style="margin-top:1.5rem" href="@Url.Action("CheckOut", "Cart")">Proceed To Checkout</a>
+                }
+            </div>
+        </div>
+    </section>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        updateTotalPrice();
+        $('.button-minus').click(function () {
+            var quantityField = $(this).parent().find('.quantity-field');
+            var currentQuantity = parseInt(quantityField.val());
+            if (currentQuantity > 1) {
+                var itemId = $(this).closest('.data').find('.remove-item').data('itemid');
+                updateQuantity(quantityField, itemId, currentQuantity - 1);
+            }
+        });
+
+        $('.button-plus').click(function () {
+            var quantityField = $(this).parent().find('.quantity-field');
+            var currentQuantity = parseInt(quantityField.val());
+            var itemId = $(this).closest('.data').find('.remove-item').data('itemid');
+            updateQuantity(quantityField, itemId, currentQuantity + 1);
+        });
+
+
+        function updateQuantity(quantityField, itemId, newQuantity) {
+            var currentQuantity = quantityField.val();
+            quantityField.data('previous-value', currentQuantity);
+            $.ajax({
+                url: '/Cart/UpdateQuantity',
+                type: 'POST',
+                data: { itemId: itemId, quantity: newQuantity },
+                success: function (updatedPrice) {
+                    if (updatedPrice.success != null && !updatedPrice.success) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: updatedPrice.errorMessage
+                        });
+                    } else {
+                        updateTotalPrice();
+                        var totalValueElement = quantityField.closest('.data').find('.total-value');
+                        totalValueElement.text(updatedPrice);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    var errorMessage = "An error occurred while updating quantity. Please try again later.";
+                    if (xhr.responseJSON && xhr.responseJSON.errorMessage) {
+                        errorMessage = xhr.responseJSON.errorMessage;
+                    }
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: errorMessage
+                    });
+
+                    var previousQuantity = quantityField.data('previous-value');
+                    quantityField.val(previousQuantity);
+                }
+            });
+        }
+
+
+        $('.remove-item').click(function () {
+            var itemId = $(this).data('itemid');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to remove this item. Are you sure you want to proceed?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Cart/RemoveItem',
+                        type: 'POST',
+                        data: { itemId: itemId },
+                        success: function (response) {
+                            updateTotalPrice();
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+        function updateTotalPrice() {
+            $.ajax({
+                url: '/Cart/GetTotalPrice',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('.totalPrice').text(response.totalPrice.toFixed(2) + "JD");
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+
+
+</script>

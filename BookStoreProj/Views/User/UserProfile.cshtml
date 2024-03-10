@@ -1,0 +1,113 @@
+﻿<link href="~/Content/css/ProfileStyle.css" rel="stylesheet" />
+@using BookStore.Enum
+@model BookStore.Models.UserModel
+@{
+    int? userId = int.Parse(Session["UserId"].ToString());
+    BookStore.Services.UserService userService = new BookStore.Services.UserService();
+    var user = userService.GetUserById(userId.Value);
+    if (user.UserType == (int)(BookStore.UserTypeEnum.Admin))
+    {
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+<div class="container">
+    <p>@ViewBag.ErrorMessage</p>
+    <div class="main-body" id="editProfileContainer">
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">User</a></li>
+                <li class="breadcrumb-item"><a href="#">User Profile</a></li>
+            </ol>
+        </nav>
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <div class="mt-3">
+                                <h4>@Model.UserName</h4>
+                                <p class="text-secondary mb-1">@Model.FirstName @Model.LastName</p>
+                                <p class="text-muted font-size-sm">@Model.Phone</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">First Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.FirstName
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Last Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.LastName
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Email
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Contact Number</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.Phone
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Gender</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @((BookStore.Enum.Gender)(Model.Gender))
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Birth Date</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                @Model.BirthDate.ToShortDateString()
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a class="btn btn-info edit-profile-btn" href="@Url.Action("EditProfile","User")">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                @Html.Action("GetSalesForUser")
+
+            </div>
+        </div>
+
+    </div>
+ </div>

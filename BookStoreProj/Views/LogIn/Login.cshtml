@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+@using BookStore.Models
+@model LoginModel
+<form method="post" class="login">
+    <h3>Login</h3>
+    <div class="login-form">
+        <h4>Login</h4>
+        <h5 class="text text-danger" style="color:red">@ViewBag.ErrorMessage</h5>        
+        <div class="input-form">
+            <div class="input-field">
+                <label for="email">Email *</label>
+                <input type="email" required value="@Model.Email" name="@nameof(Model.Email)" id="email" placeholder="Your Email">
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-field">
+                <label for="password">Password *</label>
+                <input type="password" required value="@Model.Password" name="@nameof(Model.Password)" id="password" placeholder="Password">
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit">Login Account</button>
+            <p>Don't Have an Account ? <a href="@Url.Action("Register","LogIn")">Create Account</a></p>
+        </div>
+    </div>
+</form>
+

@@ -1,0 +1,73 @@
+﻿@using BookStore.Enum
+@using BookStore.Models
+@{
+    ViewBag.Title = "Edit User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model RegisterUserModel
+<form method="post" style="width:100%;padding:0% 5%">
+    <input type="hidden" value="@Model.UserId" />
+    <h3 class="text text-danger">@ViewBag.ErrorMessage</h3>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" value="@Model.Email" class="form-control" id="Email" placeholder="Please Enter Email" name="@nameof(Model.Email)" required>
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="UserName">User Name</label>
+        <input type="text" value="@Model.UserName" class="form-control" id="UserName" name="@nameof(Model.UserName)" required />
+        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="FirstName">First Name</label>
+        <input type="text" value="@Model.FirstName" class="form-control" id="FirstName" placeholder="Please Enter First Name" name="@nameof(Model.FirstName)" required />
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="LastName">Last Name</label>
+        <input type="text" value="@Model.LastName" class="form-control" id="LastName" placeholder="Please Enter Last Name" name="@nameof(Model.LastName)" required />
+        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="BirthDate">Birth Date</label>
+        <input type="text" autocomplete="off" value="@Model.BirthDate.ToShortDateString()" class="form-control datepicker" id="BirthDate" required name="@nameof(Model.BirthDate)" />
+        @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Phone">Contact Number</label>
+        <input type="tel" step="1" value="@Model.Phone" class="form-control" id="Phone" required name="@nameof(Model.Phone)" />
+        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Gender">Gender</label>
+        <select class="form-select" style="width:100%;text-align:center;" id="Gender" name="@nameof(Model.Gender)" required>
+            <option value="@((int)Gender.Male)" @(Model?.Gender == (int)Gender.Male ? "selected" : "")>@(Gender.Male)</option>
+            <option value="@((int)Gender.Female)" @(Model?.Gender == (int)Gender.Female ? "selected" : "")>@(Gender.Female)</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="UserType">User Type</label>
+        <select class="form-select" style="width:100%;text-align:center;" id="Gender" name="@nameof(Model.UserType)" required>
+            <option value="@((int)BookStore.UserTypeEnum.Admin)" @(Model?.UserType == (int)BookStore.UserTypeEnum.Admin ? "selected" : "")>@(BookStore.UserTypeEnum.Admin)</option>
+            <option value="@((int)BookStore.UserTypeEnum.Customer)" @(Model?.UserType == (int)BookStore.UserTypeEnum.Customer ? "selected" : "")>@(BookStore.UserTypeEnum.Customer)</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
+    </div>
+    <button class="btn btn-primary" style="margin-top:25px" type="submit">Save Changes</button>
+    <a class="btn btn-secondary" style="margin-top:26px" href="@Url.Action("Index")">BackToList</a>
+</form>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var currentYear = (new Date()).getFullYear();
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',
+            maxDate: '0',
+            minDate: new Date(1900, 0, 1),
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '1900:' + currentYear
+        });
+    });
+</script>

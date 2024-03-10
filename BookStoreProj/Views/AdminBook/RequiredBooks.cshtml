@@ -1,0 +1,52 @@
+﻿@using BookStore.Models
+@{
+    ViewBag.Title = "Out Of Stock";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model IEnumerable<BookModel>
+
+<div style="width:100%;padding:3% 5%">
+    <div class="col">
+        <table class="table bg-white rounded shadow-sm  table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Book</th>
+                    <th scope="col">Book Title</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Price </th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Quantity In Store</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>
+                            <img style="width:40px;height:40px;height:100%" src="~/Books/@book.CoverImageUrl" />
+                        </td>
+                        <td style="max-width:32px">
+                            @book.BookTitle
+                        </td>
+                        <td>@book.Subject</td>
+                        <td>
+                            @book.Author
+                        </td>
+                        <td>
+                            @book.Price JD
+                        </td>
+                        <td>
+                            @book.Category.CategoryName
+                        </td>
+                        <td>
+                            @book.QuantityInStore
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,189 @@
+﻿@{
+    Layout = "~/Views/Shared/_BookLayout.cshtml";
+}
+@model BookStore.Models.BookModel
+<div class="breadcrumb-container">
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li><a href="#" style="color: #6c5dd4">Books</a></li>
+        <li><a href="#">@Model.BookTitle</a></li>
+    </ul>
+</div>
+
+<section class="book-overview">
+    <div class="img">
+        <img src="~/Books/@Model.CoverImageUrl" />
+    </div>
+    <div class="book-content">
+        <h4>@Model.BookTitle</h4>
+        <div class="meta">
+            <div class="review">
+                @if (Model.Rate != null)
+                {
+                    <div class="rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span>@Model.Rate</span>
+
+                    </div>
+                }
+                <div class="comment-like">
+                    <small><img src="../images/comment.png" alt="" /> <span>256 Reviews</span></small>
+                    <small><img src="../images/like.png" alt="" /> <span>456k Likes</span></small>
+                </div>
+            </div>
+        </div>
+        <p>
+            @Model.Description
+        </p>
+        <div class="footer">
+            <div class="author-detail">
+                <div class="author">
+                    <small>Written by</small>
+                    <strong>@Model.Author</strong>
+                </div>
+                <div class="publisher">
+                    <small>Publisher</small>
+                    <strong>@Model.PublishHouse</strong>
+                </div>
+                <div class="year">
+                    <small>Publish Date</small>
+                    <strong>@Model.PublishDate.Value.ToShortDateString()</strong>
+                </div>
+            </div>
+            <div class="badge">
+                <span><i class="fa-solid fa-bolt-lightning"></i>free shipping</span>
+                <span><i class="fa-solid fa-shield"></i>@Model.QuantityInStore Book in stocks</span>
+            </div>
+        </div>
+        <div class="book-price">
+            <div class="price">
+                <strong>@Model.Price JD</strong>
+            </div>
+            <div class="input-group">
+                <div class="quantity">
+                    <input type="button" value="-" class="button-minus" data-field="quantity" />
+                    <input type="text" step="1" min="1" value="1" name="quantity" class="quantity-field" style="width: 4.5rem" />
+                    <input type="button" value="+" class="button-plus" data-field="quantity" />
+                </div>
+                <button class="cartbtn" data-bookId="@Model.BookId"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
+                <button class="like"><i class="fa-regular fa-heart"></i></button>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="book-info">
+    <div class="detail-customer">
+        <div class="tabbtns">
+            <button class="tablink" data-btn="detail">Details Product</button>
+            <button class="tablink" data-btn="customer">Customer Reviews</button>
+        </div>
+        <div class="book-detail tabcontent" id="detail">
+            <div class="detail-line">
+                <strong>Book Title</strong><span>@Model.BookTitle</span>
+            </div>
+            <div class="detail-line">
+                <strong>Author</strong><span>@Model.Author</span>
+            </div>
+            <div class="detail-line">
+                <strong>Subject</strong><span>@Model.Subject</span>
+            </div>
+            <div class="detail-line">
+                <strong>Book Format</strong><span>Paperback, 450 Pages</span>
+            </div>
+            <div class="detail-line">
+                <strong>Date Published</strong><span>@Model.PublishDate.Value.ToShortDateString()</span>
+            </div>
+            <div class="detail-line">
+                <strong>Publisher</strong><span>@Model.PublishHouse</span>
+            </div>
+            <div class="detail-line tag-line">
+                <strong>Tags</strong>
+                <div class="tags">
+                    <span>@Model.Category.CategoryName</span>
+                </div>
+            </div>
+        </div>
+        <div class="customer-review tabcontent" id="customer">
+            <div class="rating">
+                <div class="rating-info">
+                    <h5>Rating Information</h5>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. In dolore, repudiandae sint omnis ipsum quae doloribus reprehenderit saepe veniam repellat.</p>
+                </div>
+                <div class="star">
+                    @if (Model.Rate != null)
+                    {
+                        <small><span>@Model.Rate</span>out of 5</small>
+
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="reviewer-container">
+
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.reviewer-container').load('/Book/GetVotesOnBook?bookId=@Model.BookId');
+        function updateCartItemCount() {
+            $.ajax({
+                url: '/Cart/CartItemsCount',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('#cartItemCount').text(response.count || 0);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        $('.cartbtn').click(function () {
+            var quantity = $(this).siblings('.quantity').find('.quantity-field').val();
+            var bookId = $(this).data('bookId');
+            $.ajax({
+            url: '/Cart/AddToCart',
+            type: 'POST',
+            data: { bookId: @Model.BookId, quantiity: quantity },
+            success: function (response)
+                {
+                if (response.success) {
+                        updateCartItemCount();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Added to cart',
+                            text: 'The book has been added to your cart successfully!',
+                        });
+                }
+                else
+                {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.errorMessage,
+                        });
+                }
+            },
+            error: function (xhr, status, error)
+            {
+            console.error(xhr.responseText);
+            }
+        });
+
+
+        });
+    });
+</script>

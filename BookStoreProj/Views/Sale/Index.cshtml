@@ -1,0 +1,158 @@
+﻿@using BookStore.Models
+@{
+    ViewBag.Title = "Sales";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    #Sales th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+</style>
+<div style="width:100%;padding:3% 5%">
+    <i id="filterbtn" class="fas fa-filter action-icon detailes-icon"></i>
+    <i id="exportToExcelBtn" class="fas fa-file-excel action-icon detailes-icon"></i>
+
+    <div class="col">
+        <table class="table bg-white rounded shadow-sm  table-hover" id="Sales">
+            <thead>
+                <tr>
+                    <th scope="col">Sale Date </th>
+                    <th scope="col">User Name</th>
+                    <th scope="col">User Email</th>
+                    <th scope="col">User Phone</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="body">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:flex;justify-content:space-between">
+                <h5 class="modal-title" id="filterModalLabel">Filter</h5>
+                <button type="button" title="Close" id="closemodal" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="applyFilterForm">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="fromDate">From Date</label>
+                        <input type="text" autocomplete="off" id="fromDate" class="form-control datepicker" placeholder="Please Enter From Sales Date">
+                    </div>
+                    <div class="form-group">
+                        <label for="toDate">To Date</label>
+                        <input type="text" autocomplete="off" id="toDate" class="form-control datepicker" placeholder="Please Enter To Sales Date">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" title="Cancel" class="btn btn-secondary" id="resetFilter" data-dismiss="modal">Reset Filter</button>
+                    <button type="button" title="Filter" class="btn btn-primary" id="ApplyFilter">Apply Filter</button>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    document.getElementById("exportToExcelBtn").addEventListener("click", exportToExcel);
+    function exportToExcel() {
+        var table = document.getElementById("Sales");
+        var clonedTable = table.cloneNode(true);
+        for (var i = 0; i < clonedTable.rows.length; i++) {
+            clonedTable.rows[i].deleteCell(clonedTable.rows[i].cells.length - 1);
+        }
+        var wb = XLSX.utils.table_to_book(clonedTable, { raw: true });
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+        function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+        saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), 'Sales.xlsx');
+    }
+    document.getElementById("exportToExcelBtn").addEventListener("click", exportToExcel);
+</script>
+<script>
+    $(document).ready(function () {
+
+    $('#filterbtn').click(function () {
+        $('#filterModal').modal('show');
+    });
+
+        $("#cancelbtn, #closemodal,#ApplyFilter").click(function () {
+        $('#filterModal').modal('hide');
+    });
+
+    var currentYear = (new Date()).getFullYear();
+    $('.datepicker').datepicker({
+        dateFormat: 'yy-mm-dd',
+        maxDate: '0',
+        minDate: new Date(1900, 0, 1),
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '1900:' + (new Date()).getFullYear(),
+        onSelect: function (selectedDate) {
+            if (this.id === "fromDate") {
+                $("#toDate").datepicker("option", "minDate", selectedDate);
+            } else if (this.id === "toDate") {
+                $("#fromDate").datepicker("option", "maxDate", selectedDate);
+            }
+        }
+    });
+
+    GetData();
+    function GetData(data) {
+        $.ajax({
+            url: '@Url.Action("GetSales", "Sale")',
+            type: 'GET',
+            data: data,
+            dataType: 'html',
+            success: function (response) {
+                $('tbody').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    $('#ApplyFilter').click(function () {
+        var data = {
+            fromDate: $("#fromDate").val(),
+            toDate: $("#toDate").val()
+        };
+        GetData(data);
+    });
+
+        $("#resetFilter").click(function () {
+            var data = {
+                fromDate: "",
+                toDate: ""
+            };
+            $("#fromDate").val("");
+            $('#filterModal').modal('hide');
+            $("#toDate").val("");
+            GetData(data);
+            var maxDate = '0';
+            var minDate = new Date(1900, 0, 1);
+            $("#toDate").datepicker("option", "minDate", minDate);
+            $("#fromDate").datepicker("option", "maxDate", maxDate);
+
+
+        });
+
+
+});
+
+</script>

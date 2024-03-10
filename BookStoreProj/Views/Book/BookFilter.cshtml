@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewBag.Title = "BookFilter";
+    Layout = "~/Views/Shared/_BookLayout.cshtml";
+    ViewBag.BookCount = Model.Books.Count();
+}
+@using BookStore.Models
+@model LibraryModel
+<div class="breadcrumb-container">
+    <ul class="breadcrumb">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="#">Books</a></li>
+    </ul>
+</div>
+<section class="filter" style="margin-top:-4rem">
+    <div class="book-grid-container">
+        <div class="filter-option">
+            <div class="filter-group">
+                <h4>Filter Options</h4>
+                <div class="editor-pick select-box">
+                    <div class="opt-title">
+                        <h4>Editor Picks</h4>
+                        <i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="option">
+                        @foreach (var author in Model.Authors)
+                        {
+                            <div class="category">
+                                <input name="Author" value="@author" type="checkbox" />
+                                <small>@author</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="select-date dropdown">
+                    <div class="opt-title">
+                        <h4>Enter Title</h4>
+                        <i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="option">
+                        <input type="text" name="" id="bookTitle" />
+                    </div>
+                </div>
+                <div class="genre-category select-box">
+                    <div class="opt-title">
+                        <h4>Shop By Category</h4>
+                        <i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    <div class="option">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <div class="category">
+                                <input name="category" value="@category.CategoryId" type="checkbox" />
+                                <small>@category.CategoryName</small>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="range-slider dropdown">
+                    <div class="opt-title">
+                        <h4>Price Range</h4>
+                    </div>
+                    <div class="option">
+                        <div class="price-input">
+                            <div class="field">
+                                <span>Min</span>
+                                <input type="number" id="minPrice" class="input-min">
+                            </div>
+                            <div class="separator">-</div>
+                            <div class="field">
+                                <span>Max</span>
+                                <input type="number" id="maxPrice" class="input-max">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-btn">
+                    <button id="applyFilters">Apply Filter</button>
+                    <button id="resetFilters">Reset Filter</button>
+                </div>
+            </div>
+            <i class="fa fa-chevron-right rightbtn"></i>
+        </div>
+        <div class="offer-container" id="book-items">
+
+        </div>
+    </div>
+</section>
+
+
+<section class="service">
+    <div class="service-container">
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-bolt-lightning"></i>
+            </div>
+            <div class="service-content">
+                <h5>Quick Delivery</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-shield"></i>
+            </div>
+            <div class="service-content">
+                <h5>Secure Payment</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-thumbs-up"></i>
+            </div>
+            <div class="service-content">
+                <h5>Best Quality</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <div class="service-content">
+                <h5>Return Guarantee</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        getAllBooks();
+        function getAllBooks() {
+            $.ajax({
+                url: '/Book/BooksFilter',
+                type: 'Post',
+                dataType: 'html',
+                success: function (response) {
+                    $('#book-items').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        $('#applyFilters').click(function () {
+            var filters = {
+                authorsNames: [],
+                categoryIds: [],
+                bookTitle: $('#bookTitle').val(),
+                minPrice: $('#minPrice').val(),
+                maxPrice: $('#maxPrice').val()
+            };
+            $('input[name="Author"]:checked').each(function () {
+                filters.authorsNames.push($(this).val());
+            });
+            $('input[name="category"]:checked').each(function () {
+                filters.categoryIds.push($(this).val());
+            });
+            var filtersJson = JSON.stringify(filters);
+
+            $.ajax({
+                url: '/Book/BooksFilter',
+                type: 'POST',
+                contentType: 'application/json',
+                data: filtersJson,
+                dataType: 'html',
+                success: function (response) {
+                    $('#book-items').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $('#resetFilters').click(function () {
+            $('#bookTitle').val('');
+            $('#minPrice').val('');
+            $('#maxPrice').val('');
+            $('input[name="Author"]').prop('checked', false);
+            $('input[name="category"]').prop('checked', false);
+            getAllBooks();
+        });
+        function searchByTitle() {
+            $.ajax({
+                url: '/Book/BookFilterByTitle',
+                type: 'GET',
+                data: {
+                    bookTitle: $('#searchInput').val().trim()
+                },
+                dataType: 'html',
+                success: function (response) {
+                    $('#book-items').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        $('#searchInput').on('input', function () {
+            searchByTitle();
+        });
+        $('#searchButton').click(function () {
+            searchByTitle();
+        });
+
+    });
+
+
+</script>

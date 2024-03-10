@@ -1,0 +1,30 @@
+﻿@using BookStore.Models
+@model IEnumerable<VoteModel>
+@if (Model != null && Model.Count() > 0)
+{
+    <strong>Showing @Model.Count() reviews</strong>
+
+foreach (var vote in Model)
+{
+    <div class="review">
+        <div class="img-detail">
+            <img src="../images/man1.png" alt="">
+            <div class="name">
+                <h5>@vote.UserFullName</h5>
+                @*<small>Jan 4th, 2020</small>*@
+            </div>
+        </div>
+        <div class="review-footer" style="margin-top:10px;">
+            <div class="rating-star">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <small><span>@vote.Rate</span>out of 5</small>
+            </div>
+        </div>
+    </div>
+
+}
+}

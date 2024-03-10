@@ -1,0 +1,17 @@
+﻿@using BookStore.Models
+@model IEnumerable<SalesModel>
+@foreach (var sale in Model)
+{
+    <tr>
+        <td>@sale.SalesDate.Value.ToShortDateString()</td>
+        <td>@sale.UserName</td>
+        <td>@sale.UserEmail</td>
+        <td>@sale.UserPhone</td>
+        <td>@sale.TotalPriced JD</td>
+        <td>
+            <a class="action-icon detailes-icon" title="Detailes" href="@Url.Action("SaleDetails",new { saleId = sale.SalesId })">
+                <i class="fas fa-info-circle"></i>
+            </a>
+        </td>
+    </tr>
+}

@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+@using BookStore.Models
+@using BookStore.Enum
+@model RegisterUserModel
+<form method="post" class="registration" >
+    <h3>Registration</h3>
+    <div class="registration-form">
+        <h4>Create New Account</h4>
+        <h5 class="text text-danger" style="color:red">@ViewBag.ErrorMessage </h5>
+        <p>If you don't have an account with us, Please Create new account.</p>
+        <div class="input-form">
+            <div class="input-field">
+                <label for="name">Username *</label>
+                <input type="text" value="@Model.UserName" name="@nameof(Model.UserName)" id="name" placeholder="Your Name">
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-field">
+                <label for="email">Email</label>
+                <input type="email" value="@Model.Email" name="@nameof(Model.Email)" id="email" placeholder="Your Email">
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="input-field">
+                <label for="password">Password *</label>
+                <input type="password" required value="@Model.Password" name="@nameof(Model.Password)" id="password" placeholder="Password">
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="input-field">
+                <label for="confirmPassword">Confirm Password *</label>
+                <input type="password"  required value="@Model.ConfirmPassword" name="@nameof(Model.ConfirmPassword)" id="confirmPassword" placeholder="Confirm Password">
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                <label id="passwordError"></label>
+            </div>
+            <div class="input-field">
+                <label for="FirstName">First Name *</label>
+                <input type="text" value="@Model.FirstName" name="@nameof(Model.FirstName)" id="FirstName" placeholder="Your  First Name">
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="input-field">
+                <label for="LastName">Last Name *</label>
+                <input type="text" value="@Model.LastName" name="@nameof(Model.LastName)" id="LastName" placeholder="Your Last Name">
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+            <div class="input-field">
+                <label for="Phone">Contact Number</label>
+                <input type="tel"   value="@Model.Phone" name="@nameof(Model.Phone)" id="Phone" placeholder="Your Contact Number">
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                <label for="BirthDate">Birth Date</label>
+                @Html.TextBoxFor(model => model.BirthDate, new { @class = "datepicker",Required=true, autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                <label for="Gender">Gender</label>
+                <select class="form-control" style="width:100%;text-align:center;" id="Gender" name="@nameof(Model.Gender)" required>
+                    <option value="@((int)Gender.Male)" @(Model?.Gender == (int)Gender.Male ? "selected" : "")>@(Gender.Male)</option>
+                    <option value="@((int)Gender.Female)" @(Model?.Gender == (int)Gender.Female ? "selected" : "")>@(Gender.Female)</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" onclick="validatePasswords()">Create Account</button>
+            <p>Already Have an Account ? <a href="@Url.Action("Login","LogIn")">Login Now</a></p>
+        </div>
+    </div>
+</form>
+<script>
+    function validatePasswords() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        var passwordError = document.getElementById("passwordError");
+
+        if (password !== confirmPassword) {
+            passwordError.innerText = "Passwords do not match.";
+            return false;
+        } else {
+            passwordError.innerText = "";
+            return true;
+        }
+    }
+</script>

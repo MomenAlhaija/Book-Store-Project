@@ -1,0 +1,83 @@
+﻿@using BookStore.Models
+@model StaticsModel
+@{ 
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+    <div class="container-fluid px-4">
+        <div class="row g-3 my-2">
+            <div class="col-md-3">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                    <div>
+                        <h3 class="fs-2">@Model.CountProducts</h3>
+                        <p class="fs-5">Book</p>
+                    </div>
+                    <i class="fas fa-book fs-1 primary-text border rounded-full secondary-bg p-3"></i>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                    <div>
+                        <h3 class="fs-2">@Model.TotalSales JD</h3>
+                        <p class="fs-5">Sales</p>
+                    </div>
+                    <i class="fas fa-hand-holding-usd fs-1 primary-text border rounded-full secondary-bg p-3"></i>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                    <div>
+                        <h3 class="fs-2">@Model.CountProducts</h3>
+                        <p class="fs-5">Order</p>
+                    </div>
+                    <i class="fas fa-shopping-cart fs-1 primary-text border rounded-full secondary-bg p-3"></i>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                    <div>
+                        <h3 class="fs-2">@Model.CountUsers</h3>
+                        <p class="fs-5">Users</p>
+                    </div>
+                    <i class="fas fa-user fs-1 primary-text border rounded-full secondary-bg p-3"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="row my-5">
+            <h3 class="fs-4 mb-3">Today Orders</h3>
+            <div class="col">
+                <table class="table bg-white rounded shadow-sm  table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Total Price</th>
+                            <th scope="col" width="50">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TodaySales != null)
+                        {
+                            foreach (var sale in Model.TodaySales)
+                            {
+                                <tr>
+                                    <td>@sale.FullName</td>
+                                    <td>@sale.TotalPriced JD</td>
+                                    <td>
+                                    <td>
+                                        <a class="action-icon detailes-icon" title="Detailes" href="@Url.Action("SaleDetails","Sale", new { saleId = sale.SalesId })">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>

@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Books";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h3 class="text text-danger">@ViewBag.ErrorMessage</h3>
+@using BookStore.Models
+@model IEnumerable<BasicBookInfoModel>
+<div style="width:100%;padding:3% 5%">
+    <a title="Add" class="add-link" href="@Url.Action("AddBook")">
+        <i class="fas fa-plus-circle action-icon add-icon"></i>Add
+    </a>
+    <div class="col">
+        <table class="table bg-white rounded shadow-sm  table-hover" id="myTable">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th scope="col">Book Title</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Author</th>
+                    <th>Price </th>
+                    <th>Category Name</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>
+                            <img style="width:40px;height:40px;height:100%" src="~/Books/@book.CoverImageUrl" />
+                        </td>
+                        <td style="max-width:32px">
+                            @book.BookTitle
+                        </td>
+                        <td>@book.Subject</td>
+                        <td>
+                            @book.Author
+                        </td>
+                        <td>
+                            @book.Price JD
+                        </td>
+                        <td>
+                            @book.CategoryName
+                        </td>
+                        <td>
+                            <a title="Edit" class="action-icon edit-icon" href="@Url.Action("Edit",new { bookId=book.BookId })">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a title="Detailes" class="action-icon detailes-icon" href="@Url.Action("Detailes", new {bookId=book.BookId})">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a title="Delete" class="action-icon delete-icon" onclick="deleteClass(@book.BookId)">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+function deleteClass(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this class!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Delete")",
+                data: { id: id },
+                success: function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Book Deleted Successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1500);
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                    });
+                }
+            });
+        }
+    });
+}
+</script>
+

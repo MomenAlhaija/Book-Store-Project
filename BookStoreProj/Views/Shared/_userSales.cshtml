@@ -1,0 +1,41 @@
+﻿@using BookStore.Models
+@model IEnumerable<SalesModel>
+@if (Model != null && Model.Count() > 0)
+{
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4 mb-md-0">
+            <div class="card-body">
+                <p class="mb-4">
+                    <span class="text-primary font-italic me-1"></span> My Orders
+                </p>
+                <table class="table table-responsive table-striped">
+                    <thead>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Total Sales
+                        </th>
+                        <th>
+                            View Detailes
+                        </th>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var sale in Model)
+                        {
+                          <tr>
+                              <td>@(sale.SalesDate.Value.ToShortDateString())</td>
+                              <td>@sale.TotalPriced JD</td>
+                              <td><a class="btn btn-info" href="@Url.Action("ViewSaleDetailes", new {saleId=sale.SalesId})">View</a></td>
+                          </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+}

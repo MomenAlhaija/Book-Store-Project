@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "CheckOut";
+}
+@using BookStore.Models
+@model IEnumerable<CartItemsModel>
+<section class="checkout-section page">
+    <h2>Checkout</h2>
+    <div class="main">
+        <div class="checkout-form">
+            <h4>Billing & Shipping Address</h4>
+            <form class="form-container">
+                <div class="form-control Country-field">
+                    <select class="select-box" required style="border: 1px solid #f0f0f0;padding: 5px 10px;height: 45px;border-radius: 5px;width: 100%;    appearance: none;
+                background-image: url(~/Content/images/chevron-down.svg);
+                background-repeat: no-repeat;
+                background-size: 16px 20px;
+                background-position: right 0.75rem center;font-size: 15px;outline: none;">
+                        <option>Jordana</option>
+                        <option value="SA">Saudi Arabia</option>
+                        <option value="EG">Egypt</option>
+                        <option value="AE">United Arab Emirates</option>
+                        <option value="IQ">Iraq</option>
+                        <option value="MA">Morocco</option>
+                        <option>USA</option>
+                    </select>
+                </div>
+                <div class="name-field input-field">
+                    <input type="text" placeholder="First Name" required>
+                    <input type="text" placeholder="Last Name" required>
+                </div>
+                <div class="address-field">
+                    <textarea rows="3" placeholder="Address"></textarea>
+                </div>
+                <div class="input-field">
+                    <input type="text" placeholder="City / Town" required>
+                    <input type="text" placeholder="State" required>
+                </div>
+                <div class="input-field">
+                    <input type="text" placeholder="Company Name">
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="input-field">
+                    <input type="text" placeholder="Phone no." maxlength="10" required>
+                    <input type="text" placeholder="Postcode/Zip" required>
+                </div>
+                <button id="checkoutBtn" type="submit">Add Address</button>
+            </form>
+        </div>
+        <div class="your-order">
+            <h4>Your Order</h4>
+            <div class="order-table">
+                <table cellspacing="0">
+                    <tr class="heading">
+                        <th>Book Image</th>
+                        <th>Book Title</th>
+                        <th>Total</th>
+                    </tr>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.CoverImageUrl))
+                                    {
+                                        <img src="~/Books/@item.CoverImageUrl" />
+                                    }
+                                </td>
+                                <td>@item.BookTitle</td>
+                                <td>@(item.Quantity * item.Price)</td>
+                            </tr>
+                        }
+                    }
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        <tr class="heading">
+                            <td>Total Price</td>
+                            <td>:</td>
+                            <td class="totalPrice"></td>
+                        </tr>
+                    }
+                    </table>
+
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        updateTotalPrice();
+        function updateTotalPrice() {
+            $.ajax({
+                url: '/Cart/GetTotalPrice',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('.totalPrice').text(response.totalPrice.toFixed(2)+"JD");
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+         $('#checkoutBtn').click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: '@Url.Action("Checkout", "Cart")', 
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+                if (response.message === "OK") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Your order will arrive.',
+                        timer: 3000, 
+                        showConfirmButton: false 
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong.',
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'An error occurred while processing your request.',
+                });
+            }
+        });
+    });
+    });
+</script>

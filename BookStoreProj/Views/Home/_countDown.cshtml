@@ -1,0 +1,42 @@
+﻿@using BookStore.Services;
+@model CountDownModel
+<section class="countdown">
+    <div class="container">
+        <div class="customer counter">
+            <div class="icon">
+                <i class="fa-solid fa-user-group"></i>
+            </div>
+            <div class="content">
+                <h4 class="count">@Model.CountUsers</h4>
+                <small>Happy Customers</small>
+            </div>
+        </div>
+        <div class="book counter">
+            <div class="icon">
+                <i class="fa-solid fa-book"></i>
+            </div>
+            <div class="content">
+                <h4 class="count">@Model.CountBooks</h4>
+                <small>Book</small>
+            </div>
+        </div>
+        <div class="store counter">
+            <div class="icon">
+                <i class="fa-solid fa-book-skull"></i>
+            </div>
+            <div class="content">
+                <h4 class="count">@Model.CountCategory</h4>
+                <small>Category</small>
+            </div>
+        </div>
+        <div class="writer counter">
+            <div class="icon">
+                <i class="fa-solid fa-feather"></i>
+            </div>
+            <div class="content">
+                <h4 class="count">@Model.CountAuthors</h4>
+                <small>Author</small>
+            </div>
+        </div>
+    </div>
+</section>

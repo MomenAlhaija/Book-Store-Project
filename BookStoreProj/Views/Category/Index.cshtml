@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@using BookStore.Models
+@model IEnumerable<CategoryModel>
+<div style="width:100%;padding:3% 5%">
+    <div>
+        <a title="Add" class="add-link"  href="@Url.Action("AddCategory")">
+            <i class="fas fa-plus-circle action-icon add-icon"></i>Add
+        </a>
+       
+    </div>
+ 
+    <div class="col">
+        <table class="table bg-white rounded shadow-sm  table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Category Name </th>
+                    <th scope="col">Category Desc</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>
+                            @category.CategoryName
+                        </td>
+                        <td>@category.CategoryDescription</td>
+                        <td>
+                            <a title="Edit" class="action-icon edit-icon" href="@Url.Action("EditCategory",new { categoryId = category.CategoryId })">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a title="Delete" class="action-icon delete-icon" onclick="deleteClass(@category.CategoryId)">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function deleteClass(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this class!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Delete")",
+                    data: { id: id },
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Category Deleted Successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        });
+                    }
+                });
+            }
+        });
+    }
+</script>
+

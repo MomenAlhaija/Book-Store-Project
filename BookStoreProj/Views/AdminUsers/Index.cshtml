@@ -1,0 +1,162 @@
+﻿@using BookStore.Models
+@using BookStore.Enum
+@model IEnumerable<RegisterUserModel>
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h3 class="text text-danger">@ViewBag.ErrorMessage</h3>
+<div style="width:100%;padding:3% 5%">
+
+    <a title="Add" class="add-link" href="@Url.Action("AddUser")">
+        <i class="fas fa-plus-circle action-icon add-icon"></i>Add
+    </a>
+    <div class="col">
+        <table class="table bg-white rounded shadow-sm  table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">User Name </th>
+                    <th scope="col">Email</th>
+                    <th scope="col">User Type</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Contact Number</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@((BookStore.UserTypeEnum)(user.UserType))</td>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>@user.Phone</td>
+                        <td>
+                            <a title="Edit" class="action-icon edit-icon" href="@Url.Action("EditUser",new { userId = user.UserId })">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a title="Reset Password" data-user-id="@user.UserId" class="action-icon reset-icon changePasswordBtn">
+                                <i class="fas fa-key"></i>
+                            </a>
+                            <a title="Detailes" class="action-icon detailes-icon" href="@Url.Action("Detailes", new {userId=user.UserId})">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                            <a title="Delete" class="action-icon delete-icon" onclick="deleteClass(@user.UserId)">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal" id="changePasswordModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reset Password</h5>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="newPassword">New Password:</label>
+                        <input type="password" class="form-control" id="newPassword" name="newPassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password:</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button title="Cancel" type="button" id="cancelbtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              
+                <button title="Reset Password" type="submit" id="ResetPasswordBtn" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var userId = "";
+        $('.changePasswordBtn').click(function () {
+            userId = this.getAttribute('data-user-id');
+            $('#changePasswordModal').modal('show');
+        });
+        $("#cancelbtn, #closemodal").click(function () {
+            $('#changePasswordModal').modal('hide');
+        });
+        $('#ResetPasswordBtn').click(function() {
+             var newPassword = $('#newPassword').val();
+             var confirmPassword = $('#confirmPassword').val();
+             var data = {
+                    userId: userId,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword,
+            };
+            $.ajax({
+                url: '@Url.Action("ChangePassword", "AdminUsers")',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                 success: function(response) {
+                     if(response.success){
+                         Swal.fire({
+                             icon: 'success',
+                             title: 'Password Updated',
+                         });
+                        $('#changePasswordModal').modal('hide');
+                     }
+                     else{
+                          Swal.fire({
+                             icon: 'Error',
+                             title: response.errorMessage,
+                         });
+                     }
+                 },
+                error: function(xhr, status, error) {
+                }
+            });
+    });
+
+    });
+    function deleteClass(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this class!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Delete")",
+                    data: { id: id },
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'User Deleted Successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1500);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        });
+                    }
+                });
+            }
+        });
+    }
+</script>

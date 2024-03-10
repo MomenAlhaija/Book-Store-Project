@@ -1,0 +1,308 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Books</title>
+<link href="~/Content/css/book-filter.css" rel="stylesheet" />
+<link href="~/Content/css/style.css" rel="stylesheet" />
+<link href="~/Content/font-awesome/css/all.min.css" rel="stylesheet" />
+<link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+<link rel="icon" href="~/favicon.png">
+</head>
+<body>
+    <header>
+        <nav class="navbar-2 ">
+            <div class="logo">
+                <div class="img">
+                    <img src="~/Content/images/logo.png" />
+                </div>
+                <div class="title">
+                    <h4>Bookoe<i class="fa-solid fa-grid"></i></h4>
+                    <small>Book Store Website</small>
+                </div>
+            </div>
+            <div>
+                <nav class="navbar">
+                    <ul class="nav-list">
+                        <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                        <li>
+                            <a href="@Url.Action("BookFilter", "Book")">Books</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("UserProfile", "User")">My Profile</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="search-box">
+                <div class="search-field">
+                    <input type="text" id="searchInput"
+                           placeholder="Search over @ViewBag.BookCount Book titles" />
+                    <button id="searchButton" class="search-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="nav-end">
+                <button class="cart" id="cartButton">
+                    <a id="cartItemCountLink" href="@Url.Action("CartItem", "Cart")">
+                        <i class="fa-solid fa-cart-shopping"></i> <span id="cartItemCount">0</span>
+                    </a>
+                </button>
+                <ul class="nav-list">
+
+
+                    @if (Session["UserId"] != null)
+                    {
+                        <button type="button" class="signup" id="logoutButton">
+                            <i class="fa-solid fa-user"></i>
+                            Logout
+                        </button>
+
+                    }
+                    else
+                    {
+                        <button type="button" class="signup" id="Login">
+                            <i class="fa-solid fa-user"></i>LogIn
+                        </button>
+                    }
+                </ul>
+
+            </div>
+        </nav>
+    </header>
+    @RenderBody()
+
+    <footer>
+        <div class="container">
+            <div class="logo-description">
+                <div class="logo">
+                    <div class="img">
+                        <img src="~/Content/images/logo.png" />
+                    </div>
+                    <div class="title">
+                        <h4>Bookie</h4>
+                        <small>Book Store Website</small>
+                    </div>
+                </div>
+                <div class="logo-body">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam voluptates eius quasi reiciendis recusandae provident veritatis sequi, dolores architecto dolor possimus quos</p>
+                </div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <ul class="links">
+                        <li><a href=""><i class="fa-brands fa-facebook-f"></i></a></li>
+                        <li><a href=""><i class="fa-brands fa-youtube"></i></a></li>
+                        <li><a href=""><i class="fa-brands fa-twitter"></i></a></li>
+                        <li><a href=""><i class="fa-brands fa-linkedin"></i></a></li>
+                        <li><a href=""><i class="fa-brands fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="categories list">
+                <h4>Book Categories</h4>
+                <ul>
+                    <li><a href="">Action</a></li>
+                    <li><a href="">Adventure</a></li>
+                    <li><a href="">Comedy</a></li>
+                    <li><a href="">Crime</a></li>
+                    <li><a href="">Drama</a></li>
+                    <li><a href="">Fantasy</a></li>
+                    <li><a href="">Horror</a></li>
+                </ul>
+            </div>
+            <div class="quick-links list">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="../index.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="book-filter.html">Products</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="registration.html">Sign Up</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                </ul>
+            </div>
+            <div class="our-store list">
+                <h4>Our Store</h4>
+                <ul>
+                    <li><a href=""><i class="fa-solid fa-location-dot"></i>832 Thompson Drive,San Fransisco CA 94 107,United States</a></li>
+                    <li><a href=""><i class="fa-solid fa-phone"></i>+12 1345678991</a></li>
+                    <li><a href=""><i class="fa-solid fa-envelope"></i>support@bookoe.id</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <button class="back-to-top"><i class="fa-solid fa-chevron-up"></i></button>
+
+    <script>
+        const tabbtn = document.querySelectorAll(".tablink");
+        for (let i = 0; i < tabbtn.length; i++) {
+            tabbtn[i].addEventListener('click', () => {
+                let tabName = tabbtn[i].dataset.btn;
+                let tabContent = document.getElementById(tabName);
+                let AllTabContent = document.querySelectorAll(".tabcontent");
+                let tabbtns = document.querySelectorAll(".tablink");
+                for (let j = 0; j < AllTabContent.length; j++) {
+                    AllTabContent[j].style.display = "none";
+                }
+                tabContent.style.display = "block";
+
+            })
+
+        }</script>
+    <script>
+        let filterdiv = document.querySelector(".filter-option");
+        let iconbtn = document.querySelector(".rightbtn");
+
+        iconbtn.addEventListener("click", () => {
+            filterdiv.classList.toggle("active-div");
+            iconbtn.classList.toggle("active-btn");
+        })
+
+
+
+
+
+        let editorpick = document.getElementsByClassName("select-box");
+        let icon = document.querySelectorAll(".select-box .opt-title i");
+        let answer = document.querySelectorAll(".select-box .option");
+        for (let i = 0; i < editorpick.length; i++) {
+            editorpick[i].addEventListener("click", () => {
+                if (icon[i].classList.contains("active")) {
+                    icon[i].classList.remove("active");
+                    answer[i].style.maxHeight = null;
+                    answer[i].style.marginTop = "0rem";
+                    answer[i].style.padding = "0px";
+                } else {
+                    icon[i].classList.add("active");
+                    answer[i].style.maxHeight = answer[i].scrollHeight + "px";
+                    answer[i].style.padding = "0px 20px 20px 20px";
+                }
+            });
+        }
+
+        let selectdate = document.querySelector(".select-date .opt-title");
+        let downarrow = document.querySelector(".select-date .opt-title i");
+        let option = document.querySelector(".select-date .option");
+        selectdate.addEventListener("click", () => {
+            if (downarrow.classList.contains("active")) {
+                downarrow.classList.remove("active");
+                option.style.display = "none";
+                option.style.padding = "0px";
+            } else {
+                downarrow.classList.add("active");
+                option.style.display = "block";
+                option.style.maxHeight = option.scrollHeight + "px";
+                option.style.padding = "0px 20px 20px 20px";
+            }
+        })
+
+        let likebtn = document.getElementsByClassName("like");
+        for (let i = 0; i < likebtn.length; i++) {
+            likebtn[i].addEventListener("click", () => {
+                likebtn[i].classList.toggle("liked");
+            });
+        }
+
+        const rangeInput = document.querySelectorAll(".range-input input"),
+            priceInput = document.querySelectorAll(".price-input input"),
+            range = document.querySelector(".slider .progress");
+        let priceGap = 1000;
+
+        priceInput.forEach(input => {
+            input.addEventListener("input", e => {
+                let minPrice = parseInt(priceInput[0].value),
+                    maxPrice = parseInt(priceInput[1].value);
+
+                if ((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max) {
+                    if (e.target.className === "input-min") {
+                        rangeInput[0].value = minPrice;
+                        range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";
+                    } else {
+                        rangeInput[1].value = maxPrice;
+                        range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
+                    }
+                }
+            });
+        });
+
+        rangeInput.forEach(input => {
+            input.addEventListener("input", e => {
+                let minVal = parseInt(rangeInput[0].value),
+                    maxVal = parseInt(rangeInput[1].value);
+
+                if ((maxVal - minVal) < priceGap) {
+                    if (e.target.className === "range-min") {
+                        rangeInput[0].value = maxVal - priceGap
+                    } else {
+                        rangeInput[1].value = minVal + priceGap;
+                    }
+                } else {
+                    priceInput[0].value = minVal;
+                    priceInput[1].value = maxVal;
+                    range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";
+                    range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
+                }
+            });
+        });
+    </script>
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="~/Content/js/increment-decrement.js"></script>
+    <script src="~/Content/js/back-to-top.js"></script>
+    <script src="~/Content/js/add-to-cart.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+    document.getElementById('cartButton').addEventListener('click', function() {
+        var cartPageUrl = document.getElementById('cartItemCountLink').getAttribute('href');
+        window.location.href = cartPageUrl;
+    });
+</script>
+
+</body>
+</html>
+
+
+<script>
+    $(document).ready(function () {
+        $('#logoutButton').click(function () {
+            $.ajax({
+                url: '/LogIn/Logout',
+                type: 'POST',
+                success: function (response) {
+                    window.location.href = '/Home/Index';
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $('#Login').click(function () {
+            $.ajax({
+                url: '/LogIn/Login',
+                type: 'GET',
+                success: function (response) {
+                    window.location.href = '/LogIn/Login';
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+
+        var currentYear = (new Date()).getFullYear();
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',
+            maxDate: '0',
+            minDate: new Date(1900, 0, 1),
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '1900:' + currentYear
+        });
+    });
+</script>

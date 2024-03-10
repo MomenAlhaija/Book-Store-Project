@@ -1,0 +1,241 @@
+﻿@using BookStore.Models
+@model IEnumerable<BookModel>
+<style>
+        .rating .fas.fa-star:hover,
+        .rating .fas.fa-star.hover {
+            color: gold; 
+        }
+
+        .rating .fas.fa-star.clicked,
+        .rating .fas.fa-star.clicked:hover,.active {
+            color: red;
+        }
+        
+</style>
+<div class="offer-container" id="book-items">
+    @foreach (var book in Model)
+    {
+        <div class="offer">
+            <div class="img" style="height:175px">
+                <a href="@Url.Action("BookDetailes", "Book", new {bookId=@book.BookId})">
+                    <img src="../Books/@book.CoverImageUrl" />
+                </a>
+            </div>
+            <div class="offer-content">
+                <a style="text-decoration:none" href="@Url.Action("BookDetailes", "Book", new {bookId=@book.BookId})"><h5 style="height:40px">@book.BookTitle</h5></a>
+
+                <div class="genre">
+                    <span>@book.Category.CategoryName</span>
+                </div>
+                <p style="margin-bottom:15px">@book.Description</p>
+                @if (book.Rate != null && book != null && book.Rate != 0)
+                {
+                    <p>
+                    @for (int i = 1; i <= book.Rate; i++)
+                    {
+                        <i class="fas fa-star active"></i>
+                    }
+                    @for (int j = (int)book.Rate; j < 5; j++)
+                    {
+                        <i class="fas fa-star"></i>
+                        
+                    }
+                   </p>
+                }
+                else
+                {
+                    <p style = "margin-bottom:29px" ></p>
+                }
+                <small><strong>Author</strong>:@book.Author</small>
+                <div class="offer-bottom">
+                    <button class="cartbtn" data-bookid="@book.BookId">
+                        <i class="fa-solid fa-cart-shopping"></i>Add to cart
+                    </button>
+                    <button class="like btn btn-light">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <div class="price">
+                        <strong><span></span>@book.Price JD</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        updateCartItemCount();
+        function updateCartItemCount() {
+            $.ajax({
+                url: '/Cart/CartItemsCount',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('#cartItemCount').text(response.count || 0);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        $('.cartbtn').click(function () {
+        var bookId = $(this).data('bookid');
+        $.ajax({
+        url: '/Cart/AddToCart',
+        type: 'POST',
+        data: { bookId: bookId },
+        success: function (response)
+            {
+            if (response.success) {
+                    updateCartItemCount();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Added to cart',
+                        text: 'The book has been added to your cart successfully!',
+                    });
+            }
+            else
+            {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.errorMessage,
+                    });
+            }
+        },
+        error: function (xhr, status, error)
+        {
+        console.error(xhr.responseText);
+        }
+    });
+
+
+    });
+        function addItemToCart(bookId) {
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                data: { bookId: bookId },
+                success: function (response) {
+                    if (response.success) {
+                        updateCartItemCount();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Added to cart',
+                            text: 'The book has been added to your cart successfully!',
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.errorMessage,
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        }
+        function updateCartItemCount() {
+            $.ajax({
+                url: '/Cart/CartItemsCount',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    $('#cartItemCount').text(response.count || 0);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        function initializeRatingPopup(bookId) {
+            Swal.fire({
+                title: 'Please rate this book',
+                html:
+                    '<div class="rating">' +
+                    '<i class="fas fa-star" data-value="1"></i>' +
+                    '<i class="fas fa-star" data-value="2"></i>' +
+                    '<i class="fas fa-star" data-value="3"></i>' +
+                    '<i class="fas fa-star" data-value="4"></i>' +
+                    '<i class="fas fa-star" data-value="5"></i>' +
+                    '</div>',
+                showCancelButton: true,
+                confirmButtonText: 'Rate',
+                cancelButtonText: 'Cancel',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    var rating = $('.rating .fas.fa-star.clicked').length;
+                    if (rating < 1 || rating > 5) {
+                        Swal.showValidationMessage('Please select a rating between 1 and 5 stars');
+                    } else {
+                        return rating;
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var rating = result.value;
+                    $.ajax({
+                        url: '/Book/RateBook',
+                        type: 'POST',
+                        data: { bookId: bookId, rate: rating },
+                        success: function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thank you for your rating!',
+                                text: 'Your rating has been successfully submitted.',
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                        }
+                    });
+                }
+            });
+        }
+        $(".like").click(function () {
+            var bookId = $(this).closest('.offer').find('.cartbtn').data('bookid');
+            $.ajax({
+                url: '/Book/CheckPurchase',
+                type: 'POST',
+                data: { bookId: bookId },
+                success: function (response) {
+                    if (response.purchased) {
+                        initializeRatingPopup(bookId);
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'info',
+                            title: response.errorMessage,
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: response.error,
+                    });
+                }
+            });
+        });
+        $(document).on('click', '.rating .fas.fa-star', function () {
+            var value = $(this).data('value');
+            $('.rating .fas.fa-star').removeClass('clicked');
+            $(this).addClass('clicked').prevAll().addClass('clicked');
+            $(this).nextAll().removeClass('clicked');
+        });
+        $(document).on('mouseenter', '.rating .fas.fa-star', function () {
+            $(this).addClass('hover');
+            $(this).prevAll().addClass('hover');
+        });
+        $(document).on('mouseleave', '.rating .fas.fa-star', function () {
+            $(this).removeClass('hover');
+            $(this).prevAll().removeClass('hover');
+        });
+    });
+</script>
+

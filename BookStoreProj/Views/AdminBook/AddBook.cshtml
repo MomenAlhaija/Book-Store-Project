@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Add Book";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@using BookStore.Models
+@model AddOrUpdateBookModel
+
+<form method="post" style="width:100%;padding:0% 5%" enctype="multipart/form-data">
+    <h3 class="text text-danger">@ViewBag.ErrorMessage</h3>
+    <div class="form-group">
+        <label for="ImageFile">Book Image</label>
+        <input type="file" accept="image/png,image/jpeg"  value="@Model.ImageFile" class="form-control" id="ImageFile" placeholder="Please Enter Book Image"  name="@nameof(Model.ImageFile)">
+        @Html.ValidationMessageFor(model => model.ImageFile, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="BookTitle">Book Title</label>
+        <input type="text" value="@Model.BookTitle" class="form-control" id="BookTitle" placeholder="Please Enter Book Title" required name="@nameof(Model.BookTitle)">
+        @Html.ValidationMessageFor(model => model.BookTitle, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Subject">Subject</label>
+        <input type="text" value="@Model.Subject" class="form-control" id="Subject" placeholder="Please Enter Book Subject" required name="@nameof(Model.Subject)">
+        @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Author">Author</label>
+        <input type="text" value="@Model.Author" class="form-control" id="Author" placeholder="Please Enter Book Author" required name="@nameof(Model.Author)">
+        @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Publisher">Publisher</label>
+        <input type="text" autocomplete="off" value="@Model.Publisher" class="form-control" id="Publisher" placeholder="Please Enter Book Publisher"  name="@nameof(Model.Publisher)">
+        @Html.ValidationMessageFor(model => model.Publisher, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Published">Published</label>
+        <input type="text" value="@Model.Published" class="form-control datepicker" id="Published" placeholder="Please Enter Published Date"  name="@nameof(Model.Published)">
+        @Html.ValidationMessageFor(model => model.Published, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <input type="number" value="@Model.Price" class="form-control" id="Price" placeholder="Please Enter Book Price" required name="@nameof(Model.Price)">
+        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Quantity">Quantity</label>
+        <input type="number" value="@Model.QuantityInStore" class="form-control" id="Quantity" placeholder="Please Enter Quantity In Store" required name="@nameof(Model.QuantityInStore)">
+        @Html.ValidationMessageFor(model => model.QuantityInStore, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="Description">Book Description</label>
+        <input type="text" rows="2" value="@Model.Description" class="form-control" id="Description" placeholder="Please Enter Book Description" required name="@nameof(Model.Description)" />
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <label for="MaterialNameAr">Category Name</label>
+        @Html.DropDownListFor(model => model.CategoryId, Model.CategorySelectList, "Please Select a Category", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+    </div>
+    <button title="Add" class="btn btn-primary" style="margin-top:25px" type="submit">Add</button>
+    <a title="Back" class="btn btn-secondary" href="@Url.Action("Index")" style="margin-top:25px">BackToList</a>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var currentYear = (new Date()).getFullYear();
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',
+            maxDate: '0',
+            minDate: new Date(1100, 0, 1),
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '1900:' + currentYear
+        });
+    });
+</script>

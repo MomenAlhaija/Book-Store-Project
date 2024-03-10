@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "defaultProvider": "
+    
+    
+    
+    
+    js",
+  "libraries": [
+    {
+      "library": "font-awesome@6.5.1",
+      "destination": "Content/font-awesome/",
+      "files": [
+        "css/all.min.css",
+        "sprites/brands.svg",
+        "sprites/regular.svg",
+        "sprites/solid.svg",
+        "webfonts/fa-brands-400.ttf",
+        "webfonts/fa-brands-400.woff2",
+        "webfonts/fa-regular-400.ttf",
+        "webfonts/fa-regular-400.woff2",
+        "webfonts/fa-solid-900.ttf",
+        "webfonts/fa-solid-900.woff2",
+        "webfonts/fa-v4compatibility.ttf",
+        "webfonts/fa-v4compatibility.woff2"
+      ]
+    },
+    {
+      "library": "datepicker@1.0.10",
+      "destination": "lib/datepicker/"
+    },
+    {
+      "library": "datatables@1.10.21",
+      "destination": "lib/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js",
+        "css/jquery.dataTables.min.css"
+      ]
+    },
+    {
+      "library": "datatables-buttons@3.0.1",
+      "destination": "lib/datatables-buttons/",
+      "files": [
+        "js/dataTables.buttons.min.js"
+      ]
+    },
+    {
+      "library": "TableExport@5.2.0",
+      "destination": "lib/TableExport/",
+      "files": [
+        "js/tableexport.min.js"
+      ]
+    },
+    {
+      "library": "xlsx@0.18.5",
+      "destination": "lib/xlsx/",
+      "files": [
+        "shim.min.js",
+        "xlsx.full.min.js"
+      ]
+    },
+    {
+      "library": "FileSaver.js@2.0.5",
+      "destination": "lib/FileSaver.js/",
+      "files": [
+        "FileSaver.min.js"
+      ]
+    },
+    {
+      "library": "jqueryui@1.13.2",
+      "destination": "lib/jqueryui/",
+      "files": [
+        "jquery-ui.min.js",
+        "themes/base/jquery-ui.css",
+        "themes/base/jquery-ui.min.css"
+      ]
+    }
+  ]
+}

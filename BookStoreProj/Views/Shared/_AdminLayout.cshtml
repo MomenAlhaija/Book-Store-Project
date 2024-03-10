@@ -1,0 +1,268 @@
+﻿@using BookStore.Services;
+@{Layout = null;}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/Content/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/Admin-Panel/styles.css" rel="stylesheet" />
+    <title>@ViewBag.Title-BOOKOE</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @{ int userType; }
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/lib/xlsx/xlsx.full.min.js"></script>
+    <script src="~/lib/FileSaver.js/FileSaver.min.js"></script>
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <title>Admin Dashboard</title>
+    <link rel="icon" href="~/favicon.png">
+
+    <style>
+        td img {
+            max-width: 100px;
+            transition: transform 0.3s;
+        }
+
+            td img:hover {
+                transform: scale(4);
+            }
+
+        .action-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .edit-icon {
+            color: blue;
+        }
+
+        .delete-icon {
+            color: red;
+        }
+
+        .reset-icon, .detailes-icon, .add-icon {
+            color: green;
+        }
+
+        .detailes-icon {
+            color: gray;
+        }
+
+        .add-link {
+            text-decoration: none;
+            color: black;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        <div class="bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
+                <i class="fas fa-school me-2"></i>Bookoe
+            </div>
+            <div class="list-group list-group-flush my-3">
+                <a href="@Url.Action("Index","Admin")" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                    <i class="fas fa-dashboard"></i>Dashboard
+                </a>
+                <a href="@Url.Action("Index","Category")" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                    <i class="fas fa-folder"></i>
+                    Categories
+                </a>
+                <a href="@Url.Action("Index","AdminBook")" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                    <i class="fas fa-book"></i>
+                    Books
+                </a>
+                <a href="@Url.Action("Index","AdminUsers")" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                    <i class="fas fa-user"></i> Users
+                </a>
+                <a href="@Url.Action("Index","Sale")" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-shopping-cart me-2"></i>Sales
+                </a>
+                <a href="@Url.Action("RequiredBooks","AdminBook")" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-shopping-bag"></i><i class="fas fa-exclamation-circle" style="position:absolute; color:red;"></i><span style="margin-left:15px;" >Out Of Stock</span></a>
+                @if (Session["userId"] != null)
+                {
+
+                    <a class="list-group-item list-group-item-action bg-transparent text-danger fw-bold logoutButton"><i class="fas fa-power-off me-2"></i>Logout</a>
+                }
+
+
+            </div>
+        </div>
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-2 m-0">
+                        @ViewBag.Title
+                    </h2>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    @if (Session["UserId"] != null)
+                    {
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-2"></i>
+                                    @{
+                                        int? userId = int.Parse(Session["UserId"].ToString());
+                                        UserService userService = new UserService();
+                                        var user = userService.GetUserById(userId.Value);
+                                        <text>@user.UserName</text>
+                                    }
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("UserProfile", "User")">Profile</a></li>
+                                    <li class="nav-item"><a id="changePasswordBtn" class="nav-link text-dark">ChangePassword</a></li>
+                                    <li><a class="dropdown-item text text-danger logoutButton">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                </div>
+
+
+            </nav>
+            @RenderBody()
+            <div class="modal" id="changePasswordModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header" style="display:flex;justify-content:space-between">
+                            <h5 class="modal-title">Change Password</h5>
+                            <button type="button" id="closemodal" class="close btn btn-danger" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+                            <!-- Form to change password -->
+                            <form id="changePasswordForm">
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password:</label>
+                                    <input type="password" class="form-control" id="currentPassword" name="currentPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword">New Password:</label>
+                                    <input type="password" class="form-control" id="newPassword" name="newPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm New Password:</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="button" id="cancelbtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" id="savePasswordBtn" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            var el = document.getElementById("wrapper");
+            var toggleButton = document.getElementById("menu-toggle");
+
+            toggleButton.onclick = function () {
+                el.classList.toggle("toggled");
+            };
+        </script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+        <script>
+        $('#savePasswordBtn').click(function() {
+            var oldPassword = $('#currentPassword').val();
+            var newPassword = $('#newPassword').val();
+            var confirmPassword = $('#confirmPassword').val();
+            var data = {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword,
+            };
+            $.ajax({
+                url: '@Url.Action("UpdatePassword", "User")',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                    success: function(response) {
+                        if(response.success){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Password Updated',
+                            });
+                        $('#changePasswordModal').modal('hide');
+                        }
+                        else{
+                            Swal.fire({
+                                icon: 'Error',
+                                title: response.errorMessage,
+                            });
+                        }
+                    },
+                error: function(xhr, status, error) {
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#changePasswordBtn').click(function() {
+                $('#changePasswordModal').modal('show');
+            });
+            $("#cancelbtn, #closemodal").click(function () {
+                $('#changePasswordModal').modal('hide');
+            });
+
+            checkToggledClass();
+            function checkToggledClass() {
+
+            }
+            $('#wrapper').click(function () {
+                var wrapper = $('#wrapper');
+                var sidebarWrapper = $('#sidebar-wrapper');
+
+                if (wrapper.hasClass('toggled')) {
+                    sidebarWrapper.fadeOut();
+                } else {
+                    sidebarWrapper.fadeIn();
+                }
+            });
+
+        });
+        $('.logoutButton').click(function () {
+            $.ajax({
+                url: '/LogIn/Logout',
+                type: 'POST',
+                success: function (response) {
+                    window.location.href = '/Home/Index';
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        </script>
+        <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+        @RenderSection("scripts", required: false)
+</body>
+
+</html>

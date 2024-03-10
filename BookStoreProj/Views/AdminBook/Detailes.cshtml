@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "Book Detailes";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@using BookStore.Models
+@model BookModel
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    h2 {
+        margin-bottom: 10px;
+    }
+    #ConatinImg{
+        display:flex;
+        justify-content:center;
+    }
+    </style>
+<div class="container">
+    <div id="ConatinImg">
+        <img src="~/Books/@Model.CoverImageUrl" style="width:200px;height:240px" />
+    </div>
+    <table>
+
+
+        <tr>
+
+
+            <th>Title</th>
+            <td>@Model.BookTitle</td>
+        </tr>
+        <tr>
+            <th>Author</th>
+            <td>@Model.Author</td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td>@Model.Category.CategoryName</td>
+        </tr>
+        <tr>
+            <th>Published</th>
+            @if (Model.publishDateValue != null && Model.publishDateValue.Value!=DateTime.MinValue)
+            {<td>@Model.publishDateValue.Value.ToShortDateString()</td>}
+        </tr>
+        <tr>
+            <th>Publisher</th>
+            <td>@Model.PublishHouse</td>
+        </tr>
+        <tr>
+            <th>Price</th>
+            <td>@Model.Price</td>
+        </tr>
+        <tr>
+            <th>Subject</th>
+            <td>@Model.Subject</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>
+                @Model.Description
+            </td>
+        </tr>
+    </table>
+</div>

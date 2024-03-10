@@ -1,0 +1,84 @@
+﻿@using BookStore.Models;
+@using BookStore.Enum;
+@model UserModel
+
+@{
+    ViewBag.Title = "User Detailes";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    #ConatinImg {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+<div class="container">
+    <table>
+        <tr>
+            <th>User Name</th>
+            <td>@Model.UserName</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <th>First Name</th>
+            <td>@Model.FirstName</td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>@Model.LastName</td>
+        </tr>
+        <tr>
+            <th>Birth Date</th>
+            <td>@Model.BirthDate.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <th>User Type</th>
+            <td>@((BookStore.UserTypeEnum)Model.UserType)</td>
+        </tr>
+        <tr>
+            <th>Contact Number</th>
+            <td>@Model.Phone</td>
+        </tr>
+        <tr>
+            <th>Gender</th>
+            <td>@((Gender)Model.Gender)</td>
+        </tr>
+    </table>
+</div>

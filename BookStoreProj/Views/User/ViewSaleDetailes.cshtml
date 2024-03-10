@@ -1,0 +1,57 @@
+﻿@model IEnumerable<BookStore.Models.SaleDetailesModel>
+
+@{
+    ViewBag.Title = "Sale Detailes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table class="table table-striped table-responsive">
+    <tr>
+
+        <th>
+            Sales Date
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SaleQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalUnitPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BookTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CoverImageUrl)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @item.SalesDate.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaleQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price) JD
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalUnitPrice) JD
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookTitle)
+            </td>
+            <td>
+                <img src="~/Books/@item.CoverImageUrl" style="width:100px;height:150px;" />
+            </td>
+        </tr>
+    }
+</table>
+<a class="btn btn-secondary" href="@Url.Action("UserProfile")">Back To List</a>
+

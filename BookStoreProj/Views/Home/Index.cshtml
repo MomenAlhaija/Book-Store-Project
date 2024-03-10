@@ -1,0 +1,590 @@
+﻿@using BookStore.Models
+@model IEnumerable<CategoryModel>
+<style>
+    .book-container {
+        width: calc(33.33% - 20px);
+        margin: 10px;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    @@media (max-width: 992px) {
+        .book-container {
+            width: calc(50% - 20px);
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .book-container {
+            width: 100%;
+        }
+    }
+
+    .buttonView {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+</style>
+<section class="hero">
+    <div class="main">
+        <div class="content">
+            <small>back to school</small>
+            <h2>Special 50% Off</h2>
+            <h5>for our student community</h5>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus,
+                maiores? Eius culpa molestias expedita magni incidunt necessitatibus
+                .
+            </p>
+            <div class="btns">
+                <button>Get The Deal<i class="fa-solid fa-arrow-right"></i></button>
+                <button>See other Promos</button>
+            </div>
+        </div>
+        <div class="img">
+            <img src="~/Content/images/teenager-student-girl-yellow-pointing-finger-side-copy.png"
+                 alt="" />
+        </div>
+    </div>
+    <div class="square-dot">
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+        <i class="fa-solid fa-square"></i>
+    </div>
+    <div class="orange-circle"></div>
+    <div class="blue-circle"></div>
+</section>
+<section class="service">
+    <div class="service-container">
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-bolt-lightning"></i>
+            </div>
+            <div class="service-content">
+                <h5>Quick Delivery</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-shield"></i>
+            </div>
+            <div class="service-content">
+                <h5>Secure Payment</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-thumbs-up"></i>
+            </div>
+            <div class="service-content">
+                <h5>Best Quality</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="icon">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <div class="service-content">
+                <h5>Return Guarantee</h5>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*<section class="suggestion">
+        <div class="container">
+            <div class="recommend">
+                <h4>Recommended For You</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.Lorem ipsum dolor sit amet.
+                </p>
+                <div class="book-container">
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-1.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-1.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="book">
+                        <figure>
+                            <a href="#" >
+                                <img src="~/Content/images/book-10.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-4.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                </div>
+                <div class="circle-1"></div>
+                <div class="circle-2"></div>
+                <div class="square-dot">
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                </div>
+            </div>
+            <div class="popular">
+                <h4>Popular in 2020</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Id,
+                    exercitationem.
+                </p>
+                <div class="book-container">
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-5.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-6.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-7.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                    <div class="book">
+                        <figure>
+                            <a href="#">
+                                <img src="~/Content/images/book-8.jpg" alt="" />
+                            </a>
+                        </figure>
+                    </div>
+                </div>
+                <div class="circle-1"></div>
+                <div class="circle-2"></div>
+                <div class="square-dot">
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                    <i class="fa-solid fa-square"></i>
+                </div>
+            </div>
+        </div>
+    </section>*@
+
+<section class="offer">
+    <div class="header">
+        <h4>Category</h4>
+        <p>
+            Book Categories
+        </p>
+    </div>
+    <div class="container" style="display:flex;flex-direction:column">
+        <h2>Category Filter</h2>
+        <div class="btn-group mb-3">
+            <button type="button" class="btn btn-primary  category-filter" data-category="0" data-category="all">All</button>
+            @foreach (var Categor in Model)
+            {
+                <button type="button" data-category="@Categor.CategoryId" class="btn btn-primary category-filter" data-category="fantasy">@Categor.CategoryName</button>
+            }
+        </div>
+        <div class="row" id="book-list">    </div>
+    </div>
+    <div class="offer-container" id="book-items">
+
+    </div>
+    <div id="viewMore">
+
+    </div>
+</section>
+
+
+
+@*<section class="book-sale">
+        <div class="container" style="display:flex;flex-direction:column">
+            <h2>Category Filter</h2>
+            <div class="btn-group mb-3">
+                <button type="button" class="btn btn-primary category-filter" data-category="all">All</button>
+                @foreach (var Categor in Model)
+                {
+                    <button type="button" data-category="@Categor.CategoryId" class="btn btn-primary category-filter" data-category="fantasy">@Categor.CategoryName</button>
+                }
+            </div>
+            <div class="row" id="book-list">    </div>
+        </div>
+        <div class="book-container">
+            <div class="wrapper">
+                <ul class="carousel" >
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-1.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>The Giver</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-2.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>The Wright ...</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-9.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>The Ruins Of...</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-10.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>Percy Jackson</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-5.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>To kill a...</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-6.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>Horry Potter</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="img">
+                            <a href="Pages/book-detail.html"><img src="~/Content/images/book-7.jpg" alt="" /></a>
+                            <span class="badge">50%</span>
+                        </div>
+                        <h5>Heroes of ...</h5>
+                        <div class="genre">
+                            <span>adventure,</span><span>survival</span>
+                        </div>
+                        <div class="footer">
+                            <span class="star"><i class="fa fa-star"></i> 4.7</span>
+                            <div class="price">
+                                <span>$45.4</span>
+                                <span><strike>$90.4</strike></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>*@
+
+@*<section class="feature">
+        <div class="main">
+            <div class="content">
+                <h4>Featured Books</h4>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. <br />
+                    Molestias, illum? Doloremque eius quis officiis rerum pariatur.
+                </p>
+                <div class="featured-book-card">
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-2.jpg" alt="" /></a>
+                    </div>
+                    <div class="card-description">
+                        <div class="card-header">
+                            <div class="icon">
+                                <i class="fa-regular fa-bookmark"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="title">
+                                <h5>The Wright Brothers</h5>
+                                <small>biography, adventure</small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h6>Synopsis</h6>
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                                Suscipit, aperiam magnam! Eius voluptas nihil repellendus quam
+                                velit harum vel alias mollitia veritatis omnis. Ut vel, fugiat
+                                obcaecati odio minus molestiae?
+                            </p>
+                            <div class="author-year">
+                                <div class="author">
+                                    <small>Written by</small>
+                                    <strong>Kevin Smiley</strong>
+                                </div>
+                                <div class="year">
+                                    <small>Year</small>
+                                    <strong>2019</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price">
+                                <span>$84.78</span>
+                                <strike>$90.00</strike>
+                            </div>
+                            <div class="cartbtn">
+                                <button><i class="fa-solid fa-cart-shopping"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="book-section">
+                <div class="container">
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-2.jpg" alt="" /></a>
+                    </div>
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-1.jpg" alt="" /></a>
+                    </div>
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-3.jpg" alt="" /></a>
+                    </div>
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-4.jpg" alt="" /></a>
+                    </div>
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-5.jpg" alt="" /></a>
+                    </div>
+                    <div class="img">
+                        <a href="pages/book-detail.html"><img src="~/Content/images/book-6.jpg" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="circle-1"></div>
+        <div class="circle-2"></div>
+    </section>*@
+
+@Html.Action("CountDown")
+@*<section class="subscription">
+        <div class="container">
+            <h4>
+                Subscribe our newsletter for Latest <br />
+                books updates
+            </h4>
+
+            <div  class="input">
+                <input type="text" placeholder="Type your email here" />
+                <button>subscribe</button>
+            </div>
+        </div>
+        <div class="circle-1"></div>
+        <div class="circle-2"></div>
+    </section>*@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/Content/js/rate.js"></script>
+<script>
+    $(document).ready(function () {
+        var category = 0;
+        CallBooks(category);
+
+        $('.category-filter').click(function () {
+            category = $(this).data('category');
+            CallBooks(category);
+        });
+
+        function CallBooks(category) {
+            $.ajax({
+                url: '/Book/GetBookByCategory',
+                type: 'GET',
+                data: { categoryId: category },
+                dataType: 'html',
+                success: function (response) {
+                    $('#book-items').html(response); 
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: response.error,
+                    });
+                }
+            });
+        }
+
+        $('#viewMore').append(`
+        <div class="buttonView">
+            <div>
+                <a class="btn btn-primary" href="/Book/BookFilter?categoryId=${category}">View More</a>
+            </div>
+        </div>
+    `);
+
+
+        function displayBooks(books) {
+            $('#book-items').empty();
+
+            $.each(books, function (index, book) {
+                var bookId = book.BookId;
+                var cardHtml = `
+        <div class="offer">
+            <div class="img" style="height:175px" >
+                <a href="/Book/BookDetailes?bookId=${bookId}">
+                    <img  src="../../Books/${book.CoverImageUrl}" />
+                </a>
+            </div>
+            <div class="offer-content">
+                <h5>${book.BookTitle}</h5>
+                <div class="genre">
+                    <span>${book.Category.CategoryName}</span>
+                </div>
+                <p>${book.Description.substring(0, 50)}</p>
+                <p>
+                    <span class="rating-stars">
+                        ${book.Rate != null && book.Rate != 0 ? generateStarRating(book.Rate) : `<p style="margin-bottom:50px"></p>`}
+                    </span>
+                </p>
+                <small><b>Author</b>:${book.Author}</small>
+                <div class="offer-bottom">
+                    <button type="button" class="cartbtn addToCart" onclick="addItemToCart(${bookId})">
+                        <i class="fa-solid fa-cart-shopping"></i>Add to cart
+                    </button>
+                     <button class="like">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <div class="price">
+                        <strong><span></span>${book.Price} JD</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+                $('#book-items').append(cardHtml);
+            });
+
+            function generateStarRating(rate) {
+                var ratingHtml = '';
+                for (var i = 1; i <= 5; i++) {
+                    if (i <= rate) {
+                        ratingHtml += '<i class="fas fa-star active" style="color:gold"></i>';
+                    } else {
+                        ratingHtml += '<i class="fas fa-star"></i>';
+                    }
+                }
+                return ratingHtml;
+            }
+
+
+        }
+    });
+</script>
